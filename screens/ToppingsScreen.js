@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import CustomButton from '../components/Button';
+import NextButton from '../components/NextButton';
 import { MonoText } from '../components/StyledText';
 import { getMenuItems, getToppingsForMenuItem } from '../utils/utils.js';
 import { THEME } from '../constants/Theme.js';
@@ -16,6 +17,8 @@ export default ToppingsScreen = (props) => {
 
   let { navigation } = props;
   let selectedMenuItem = navigation.state.params.selectedMenuItem;
+  let selectedCommunity = navigation.state.params?.selectedCommunity;
+
 
   const [toppings, setToppings] = useState();
   const [meatToppings, setMeatToppings] = useState();
@@ -52,7 +55,6 @@ export default ToppingsScreen = (props) => {
   // }, [toppings])
 
   const selectToppingItem = (item) => {
-    console.log(item, "selectedTopping")
     const check = selectedToppings.some(x => x.id == item.id);
     if(check == false){
     setSelectedToppings((prev) => ([ ...prev, item ]));
@@ -64,14 +66,11 @@ export default ToppingsScreen = (props) => {
 
   }
 
-  console.log(selectedToppings, "selectedToppings")
-
 
   return (
     <View style={styles.container}>
-
+      <View style={{flex:9}}>
       <ScrollView
-        style={styles.container}
         contentContainerStyle={styles.contentContainer}>
         <View style={{ alignItems: "center" }}>
           <Text style={{ color: "red" }}>{errorMsg}</Text>
@@ -105,18 +104,19 @@ export default ToppingsScreen = (props) => {
               )
             })
           }
-
         </View>
       </ScrollView>
-      <Button
+      </View>
+      <View style={{flex:1}}>
+      <NextButton
         title="Next"
         onPress={() => {
           /* 1. Navigate to the Details route with params */
           navigation.navigate('Note',
-             { selectedMenuItem },
-             {selectedToppings})
-        }}
+             { selectedMenuItem, selectedToppings, selectedCommunity },
+          )}}
       />
+      </View>
     </View >
   );
 }
@@ -129,6 +129,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    backgroundColor: '#fff',
+    paddingHorizontal: 15,
+    backgroundColor: THEME.GREY_LIGHT_BACKGROUND,
+    justifyContent: "space-between",
+    flexDirection: "column"
   },
 });

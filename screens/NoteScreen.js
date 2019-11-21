@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import CustomButton from '../components/Button';
+import NextButton from '../components/NextButton';
+
 import { MonoText } from '../components/StyledText';
 import { getMenuItems, getToppingsForMenuItem } from '../utils/utils.js';
 import { THEME } from '../constants/Theme.js';
@@ -18,64 +20,36 @@ export default NoteScreen = (props) => {
   let { navigation } = props;
   let selectedMenuItem = navigation.state.params.selectedMenuItem;
   let selectedToppings = navigation.state.params.selectedToppings;
+  let selectedCommunity = navigation.state.params?.selectedCommunity;
+
 
   const [note, setNote] = useState();
 
-
-
-
-
-  // useEffect(() => {
-  //   if (toppings != undefined) {
-  //     let toppingsTypes = [];
-  //     toppings?.forEach(i => {
-  //       toppingsTypes.push(i.toppingType.mainValue)
-  //     });
-
-  //     let toppingsTypesUnique = [...new Set(toppingsTypes)];
-
-
-  //     setToppingsTypes(toppingsTypesUnique);
-  //   }
-  // }, [toppings])
-
-  const selectToppingItem = (item) => {
-    console.log(item, "selectedTopping")
-    const check = selectedToppings.some(x => x.id == item.id);
-    if(check == false){
-    setSelectedToppings((prev) => ([ ...prev, item ]));
-    } else {
-      var newSelectedToppings = selectedToppings.filter(x => x.id != item.id);
-      setSelectedToppings(newSelectedToppings);
-      //remove from selectedToppings
-    }
-
-  }
-
-  console.log(selectedToppings, "selectedToppings")
-
-
   return (
     <View style={styles.container}>
-
-      <ScrollView
-        style={styles.container}
+      <View
+        style={{flex:9}}
         contentContainerStyle={styles.contentContainer}>
        <TextInput 
-       style={{borderWidth: 1, margin: 25, height: 150, justifyContent: "flex-start", textAlignVertical: "top", padding: 5}}
+       style={{borderWidth: 1, margin: 10, height: 150, justifyContent: "flex-start", textAlignVertical: "top", padding: 5}}
        multiline={true}
        numberOfLines={10}
+       placeholder="Enter special instructions"
        onChangeText={text => setNote(text)}
        value={note}
        />
-      </ScrollView>
-      <Button
+      </View>
+      <View style={{flex:1}}>
+      <NextButton
         title="Next"
         onPress={() => {
           /* 1. Navigate to the Details route with params */
-          navigation.navigate('Note')
+          navigation.navigate('Review',
+             { selectedMenuItem, selectedToppings, selectedCommunity, note },
+             )
         }}
       />
+      </View>
     </View >
   );
 }
@@ -88,6 +62,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    backgroundColor: '#fff',
+    paddingHorizontal: 15,
+    backgroundColor: THEME.GREY_LIGHT_BACKGROUND,
+    justifyContent: "center"
   },
 });

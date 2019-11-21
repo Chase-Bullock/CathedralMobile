@@ -5,9 +5,9 @@ import { THEME } from '../constants/Theme.js';
 
 const customButton = (props => {
   let iconPlaced = null;
+  let imagePlaced = null
   let buttonTitle = null;
 
-  const selected = props.value != undefined ? styles.on : styles.off
   if (props.title) {
     buttonTitle = <Text style={[styles.text, { color: props.inverse ? 'white' : props.color, fontSize: 18, flex:2 }]}>{props.title}</Text>;
   }
@@ -24,10 +24,10 @@ const customButton = (props => {
 
   if (props.image != undefined) {
     imagePlaced = <View style={{ marginRight: props.title ? 3 : 0 }}>
-      {/* <Image
-        source={require(props.image)}
+      <Image
+        source={props.image}
         style={{width: 80, height:80,}}
-        color={props.inverse ? 'white' : props.color ? props.color : THEME.GREY_MEDIUM_ALT} /> */}
+        color={props.inverse ? 'white' : props.color ? props.color : THEME.GREY_MEDIUM_ALT} />
     </View>
   }
 
@@ -39,8 +39,9 @@ const customButton = (props => {
     props.style,
     props.disabled ? styles.disabled : null,
     {
-      borderColor: props.color,
-      backgroundColor: {selected}
+      borderColor: props.selected ? THEME.GREEN_ACCENT : THEME.GREY_LIGHT,
+      elevation: props.selected ? 5 : 0,
+      borderWidth: props.selected ? 2 : 1
     }]}>
       {imagePlaced}
       {iconPlaced}
@@ -52,17 +53,22 @@ const customButton = (props => {
 
 const styles = StyleSheet.create({
   button: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: 'center',
-    padding: 6,
-    borderBottomWidth: 1,
-    borderRadius: 3,
-    height: 80,
-    width: "90%",
-    flex:3,
-    justifyContent: "space-between"
-  },
+    width: "100%",
+    borderRadius:8,
+    borderColor:THEME.GREY_LIGHT,
+    borderWidth:1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    padding:5,
+    marginBottom:5,
+    minHeight:50,
+    backgroundColor:"#FFF",
+    flexDirection:"row",
+    justifyContent:"flex-start",
+    alignItems:"center",
+},
   text: {
     textAlign: "center",
   },

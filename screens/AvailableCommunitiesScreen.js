@@ -15,46 +15,35 @@ import axios from 'axios';
 import CustomButton from '../components/Button';
 import NextButton from '../components/NextButton';
 import { MonoText } from '../components/StyledText';
-import { getMenuItems } from '../utils/utils.js';
+import { getCommunities } from '../utils/utils.js';
 import { THEME } from '../constants/Theme.js';
 import { UserContext } from '../context/AppContext';
 
-const MenuScreen = (props) => {
+const AvailableCommunitiesScreen = (props) => {
   let { navigation } = props;
-  let selectedCommunity = navigation.state.params?.selectedCommunity;
 
-  const [menuItems, setMenuItems] = useState();
+  const [communities, setCommunities] = useState();
+  const [selectedCommunity, setSelectedCommunity] = useState();
   const [errorMsg, setErrorMsg] = useState();
-  const [selectedMenuItem, setSelectedMenuItem] = useState();
   const [user, setUser] = useContext(UserContext);
-  const [menuItemImages, setMenuItemImages] = useState();
 
   useEffect(() => {
-    getMenuItems().then((response) => 
-    {
-      var imagesArray = [];
-      setMenuItems(response)
-      response.forEach(menuItem => {
-        imagesArray.push(require('../assets/images/pizza.png'));
-      });
-      setMenuItemImages(imagesArray);
-    });
-    
+    //currently getting all communities not only available. This is for testing purposes
+    getCommunities().then((response) => setCommunities(response));
   }, [])
 
-  const navigateToToppings = () => {
-    if (selectedMenuItem != undefined) {
+  const navigateToMenuItems = () => {
+    if (selectedCommunity != undefined) {
       navigation.navigate(
-        'Toppings',
-        { selectedMenuItem,
-          selectedCommunity })
+        'Menu',
+        { selectedCommunity })
     } else {
-      setErrorMsg("Select something from the menu!")
+      setErrorMsg("Select a community!")
     }
   }
 
-  const selectMenuItem = (item) => {
-    setSelectedMenuItem(item);
+  const selectCommunity = (community) => {
+    setSelectedCommunity(community);
     setErrorMsg("");
   }
 
@@ -65,14 +54,13 @@ const MenuScreen = (props) => {
         <Text style={{color:"red"}}>{errorMsg}</Text>
         </View>
         <View style={{ alignItems: "center", flex: 1, flexDirection: 'column', justifyContent: 'space-between', maxHeight: 200 }}>
-          {menuItemImages && menuItems ?.map((item, index) => (
+          {communities ?.map(community => (
             <CustomButton
-              key={item.id}
+              key={community.id}
               style={{ marginBottom: 12, flex:1, width: "90%" }}
-              title={item.name}
-              image={typeof menuItemImages[index] !== 'undefined' ? menuItemImages[index] : undefined}
-              selected={selectedMenuItem?.id == item.id}
-              onPress={() => { selectMenuItem(item) }} />
+              title={community.name}
+              selected={selectedCommunity?.id == community.id ? true : false}
+              onPress={() => { selectCommunity(community) }} />
           ))}
         </View>
       </View>
@@ -80,7 +68,7 @@ const MenuScreen = (props) => {
       <NextButton
         title="Next"
         onPress={() => {
-          navigateToToppings();
+          navigateToMenuItems();
         }}
         inverse={true}
       />
@@ -89,12 +77,12 @@ const MenuScreen = (props) => {
   );
 }
 
-MenuScreen.navigationOptions = {
-  title: 'Menu',
+AvailableCommunitiesScreen.navigationOptions = {
+  title: 'Select Community',
 };
 
 
-export default MenuScreen;
+export default AvailableCommunitiesScreen;
 
 const styles = StyleSheet.create({
   container: {
