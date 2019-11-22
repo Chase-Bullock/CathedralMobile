@@ -31,7 +31,7 @@ export default ReviewScreen = (props) => {
   useEffect(() => {
     setUserOrder(
       {
-        orderItems: [
+        OrderItems: [
           {
             menuItem: selectedMenuItem,
             sizeId: null,
@@ -39,7 +39,7 @@ export default ReviewScreen = (props) => {
             toppings: selectedToppings
           }
         ],
-        order: {
+        Order: {
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
@@ -47,7 +47,7 @@ export default ReviewScreen = (props) => {
           addressLine2: user ?.addressLine2,
           cityId: user.cityId,
           zipCode: user ?.zipcode,
-          communityId: selectedCommunity,
+          communityId: selectedCommunity.id,
           builderId: user ?.builderId,
           note: note
         }
@@ -55,7 +55,6 @@ export default ReviewScreen = (props) => {
     )
   }, []);
 
-  console.log(userOrder);
   return (
     <View style={styles.container}>
 
@@ -113,13 +112,13 @@ export default ReviewScreen = (props) => {
         <NextButton
           title="Confirm"
           onPress={() => {
-            console.log("submitting: ",userOrder);
-
-            submitOrder(userOrder)
-            /* 1. Navigate to the Details route with params */
-            navigation.navigate('OrderStatus',
-              { selectedMenuItem, selectedToppings, selectedCommunity, note }
-            )
+            submitOrder(userOrder).then(response => {
+              if(response != null){
+                navigation.navigate('OrderStatus',
+                  { selectedMenuItem, selectedToppings, selectedCommunity, note, orderId: response }
+                )
+              }
+            });
           }}
         />
       </View>

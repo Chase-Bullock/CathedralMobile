@@ -79,28 +79,31 @@ export default ToppingsScreen = (props) => {
           {tacoToppings &&
             <Text style={THEME.TEXT_SECTION_TITLE_SMALL}>Taco Toppings</Text>}
           {
-            tacoToppings && tacoToppings.map((item, index) => {
+            tacoToppings && tacoToppings.map((topping, index) => {
               return (
                 <CustomButton
-                  key={item.id}
+                  key={topping.id}
                   style={{ marginBottom: 12, height: 50 }}
-                  title={item.name}
+                  title={topping.name}
+                  selected={selectedToppings.includes(topping)}
                   //image={'../assets/images/pizza.png'}
-                  onPress={() => { selectToppingItem(item) }} />
+                  onPress={() => { selectToppingItem(topping) }} />
               )
             })
           }
           {tacoToppings &&
             <Text style={THEME.TEXT_SECTION_TITLE_MEDIUM}>Taco Toppings</Text>}
           {
-            tacoSauceToppings && tacoSauceToppings.map((item, index) => {
+            tacoSauceToppings && tacoSauceToppings.map((topping, index) => {
               return (
                 <CustomButton
-                  key={item.id}
+                  key={topping.id}
                   style={{ marginBottom: 12, height: 50 }}
-                  title={item.name}
+                  title={topping.name}
+                  selected={selectedToppings.includes(topping)}
+
                   //image={'../assets/images/pizza.png'}
-                  onPress={() => { selectToppingItem(item) }} />
+                  onPress={() => { selectToppingItem(topping) }} />
               )
             })
           }

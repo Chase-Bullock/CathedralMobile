@@ -21,11 +21,11 @@ export default OrderStatusScreen = (props) => {
 
   let { navigation } = props;
   let selectedMenuItem = navigation.state.params.selectedMenuItem;
+  let orderId = navigation.state.params.orderId;
   let selectedToppings = navigation.state.params.selectedToppings;
   let selectedCommunity = navigation.state.params ?.selectedCommunity;
   let note = navigation.state.params.note;
   const [user, setUser] = useContext(UserContext);
-
 
   return (
     <View style={styles.container}>
@@ -34,6 +34,26 @@ export default OrderStatusScreen = (props) => {
         style={{ flex: 9 }}
         contentContainerStyle={styles.contentContainer}>
         <View style={{ flexDirection: "column", flex: 1 }}>
+          <View style={{ flexDirection: "row", marginBottom: 25 }}>
+            <View style={{ flex: 3 }}>
+              <View style={{ backgroundColor: "blue", height: 2, width: 100, zIndex: -1, marginTop:8}}></View>
+            </View>
+            <View style={{ flex: 1 }}>
+              <View style={{ backgroundColor: "white", width: 20, height: 20, borderRadius: 50, borderWidth: 5, borderColor: "green" }}></View>
+            </View>
+            <View style={{ flex: 3 }}>
+            <View style={{ backgroundColor: "red", height: 2, width:200, zIndex: -1, marginTop:8}}></View>
+            </View>
+            <View style={{ flex: 1 }}>
+              <View style={{ backgroundColor: "white", width: 20, height: 20, borderRadius: 50, borderWidth: 5, borderColor: "green" }}></View>
+            </View>
+            <View style={{ flex: 3 }}>
+            <View style={{ backgroundColor: "grey", height: 2, width: "100%", zIndex: -1, marginTop:8}}></View>
+            </View>
+            <View style={{ flex: 1 }}>
+              <View style={{ backgroundColor: "white", width: 20, height: 20, borderRadius: 50, borderWidth: 5, borderColor: "grey" }}></View>
+            </View>
+          </View>
           <View style={{ flexDirection: "row", marginBottom: 25 }}>
             <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 14, marginBottom: 15 }}>{"Personal Info:  "}</Text>
