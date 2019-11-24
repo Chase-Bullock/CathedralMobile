@@ -26,6 +26,18 @@ export async function getBuilders() {
   }
 };
 
+
+export async function getOrderStatus(id) {
+  try{
+  let result = await fetch(baseUrl + `/api/orders/${id}`,);
+  let resultJson = await result.json();
+  console.log(resultJson);
+  return resultJson;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export async function getCities() {
   try{
   let result = await fetch(baseUrl + '/api/locations/cities',);

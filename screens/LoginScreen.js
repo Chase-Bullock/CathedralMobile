@@ -30,11 +30,13 @@ export default LoginScreen = (props) => {
   let { navigation } = props;
 
   const [user, setUser] = useContext(UserContext);
-  
   const [password, setPassword] = useState("Test123$");
   const [email, setEmail] = useState("chaserbullock@live.com");
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [order, setOrder] = useState({
+    status = "InProgress"
+  })
   let spinner = null;
   if (loading) {
     spinner = <ActivityIndicator color={THEME.BLUE_PRIMARY} />;
@@ -64,11 +66,43 @@ export default LoginScreen = (props) => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={{ width: "70%", height: 120 }}>
+      {/* <View style={{ width: "70%", height: 120 }}>
         <Image style={{ flex: 1, width: undefined, height: undefined }}
           source={require('../assets/images/Logo.png')}
           resizeMode="contain" />
-      </View>
+      </View> */}
+      <View style={{ flexDirection: "row", marginBottom: 150 }}>
+            <View style={{ flex: 4 }}>
+              <View style={{ backgroundColor: THEME.GREEN_DARK, height: 2, width: "100%", zIndex: 20000, marginTop:8}}></View>
+            </View>
+            <View style={{ flex: 1,  flexDirection: "column" }}>
+              <View style={{backgroundColor: "white", width: "100%", height: 20, borderRadius: 50, borderWidth: 5, borderColor: THEME.GREEN_DARK }}>
+              </View>
+                <View style={{width:200, marginLeft: -17}}><Text style={{fontSize: 12, color: THEME.GREEN_DARK}}>Pending</Text>
+                </View>
+            </View>
+            <View style={{ flex: 5 }}>
+            <View style={{ backgroundColor: {order?.status == "InProgress" ? THEME.GREEN_DARK : THEME.GREY_DARK}, height: 2, width:"100%", zIndex: -1, marginTop:8}}></View>
+            </View>
+            <View style={{ flex: 1,  flexDirection: "column" }}>
+              <View style={{backgroundColor: "white", width: "100%", height: 20, borderRadius: 50, borderWidth: 5, borderColor: {order?.status == "InProgress" ? THEME.GREEN_DARK : THEME.GREY_DARK},}}>
+              </View>
+                <View style={{width:200, marginLeft: -17}}><Text style={{fontSize: 12, color:  {order?.status == "InProgress" ? THEME.GREEN_DARK : THEME.GREY_DARK}, }}>In Progress</Text>
+                </View>
+            </View>
+            <View style={{ flex: 5 }}>
+            <View style={{ backgroundColor:  {order?.status == "InProgress" ? THEME.GREEN_DARK : THEME.GREY_DARK}, height: 2, width: "100%", zIndex: -1, marginTop:8}}></View>
+            </View>
+            <View style={{ flex: 1,  flexDirection: "column" }}>
+              <View style={{backgroundColor: "white", width: "100%", height: 20, borderRadius: 50, borderWidth: 5, borderColor: "green" }}>
+              </View>
+                <View style={{width:200, marginLeft: -17}}><Text style={{fontSize: 12, color: THEME.GREY_MEDIUM}}>Out for delivery</Text>
+                </View>
+            </View>
+            <View style={{ flex: 4 }}>
+              <View style={{ backgroundColor: "blue", height: 2, width: "100%", zIndex: 20000, marginTop:8}}></View>
+            </View>
+          </View>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{
           borderColor: "rgba(0,0,0,0.2)",
