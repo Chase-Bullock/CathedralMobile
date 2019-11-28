@@ -1,4 +1,6 @@
-const baseUrl = 'http://172.31.99.10:5001';
+//const baseUrl = 'http://172.31.99.10:5001';
+const baseUrl = 'http://192.168.0.109:5001';
+
 const LOAD_USER = "LOAD_USER";
 
 import { useAppState } from "../context/AppContext"

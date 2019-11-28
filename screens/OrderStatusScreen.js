@@ -12,7 +12,7 @@ import CustomButton from '../components/Button';
 import NextButton from '../components/NextButton';
 
 import { MonoText } from '../components/StyledText';
-import { getMenuItems, getToppingsForMenuItem } from '../utils/utils.js';
+import { getMenuItems, getOrderStatus } from '../utils/utils.js';
 import { THEME } from '../constants/Theme.js';
 import { UserContext } from '../context/AppContext';
 
@@ -22,11 +22,13 @@ export default OrderStatusScreen = (props) => {
   let { navigation } = props;
   let selectedMenuItem = navigation.state.params.selectedMenuItem;
   let orderId = navigation.state.params.orderId;
+  const [order, setOrder] = useState();
   let selectedToppings = navigation.state.params.selectedToppings;
   let selectedCommunity = navigation.state.params ?.selectedCommunity;
   let note = navigation.state.params.note;
   const [user, setUser] = useContext(UserContext);
 
+  useEffect()
   return (
     <View style={styles.container}>
 
