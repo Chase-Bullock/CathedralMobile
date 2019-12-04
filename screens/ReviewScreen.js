@@ -65,6 +65,13 @@ export default ReviewScreen = (props) => {
             <View style={{ flexDirection: "row", marginBottom: 25 }}>
               <View style={{flex: 1}}>
               <Text style={{ fontSize: 14, marginBottom: 15 }}>{"Personal Info:  "}</Text>
+              <Text
+              style={{fontSize: 10, color: THEME.ACTION_ORANGE}}
+                onPress={() => {
+                navigation.navigate('Register',
+                  { lastRoute: "Review" }
+                )
+            }}>Change Order Info</Text>
               </View>
               <View style={{ flexDirection: "column", flex: 3 }}>
                 <View>
@@ -114,6 +121,7 @@ export default ReviewScreen = (props) => {
           onPress={() => {
             submitOrder(userOrder).then(response => {
               if(response != null){
+                console.log(response)
                 navigation.navigate('OrderStatus',
                   { selectedMenuItem, selectedToppings, selectedCommunity, note, orderId: response }
                 )

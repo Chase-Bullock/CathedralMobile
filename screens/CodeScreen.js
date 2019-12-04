@@ -21,17 +21,17 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import DefaultInput from '../components/CustomInput';
 import { MonoText } from '../components/StyledText';
 import { getMenuItems, getToppingsForMenuItem } from '../utils/utils.js';
-import { login } from '../utils/utils.js';
+import { submitCode } from '../utils/utils.js';
 import { THEME } from '../constants/Theme.js';
 //import AsyncStorage from '@react-native-community/async-storage';
 import { UserContext } from '../context/AppContext.js';
 
-export default LoginScreen = (props) => {
+export default CodeScreen = (props) => {
   let { navigation } = props;
 
   const [user, setUser] = useContext(UserContext);
   const [password, setPassword] = useState("Test123$");
-  const [email, setEmail] = useState("chaserbullock@live.com");
+  const [code, setCode] = useState();
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState({
@@ -43,22 +43,20 @@ export default LoginScreen = (props) => {
   }
 
 
-  const onLogin = () => {
+  const onSubmit = () => {
     setLoading(true);
-    userObj = {
-      email,
-      password
+    codeObj = {
+      code
     }
-    login(userObj).then((response) => {
+    submitCode(codeObj).then((response) => {
       setLoading(false);
-      if(response?.token){
-      setUser(response);
-      setMessage("");
+      console.log("code response: ", response )
+      if(response.accepted){
       navigation.navigate(
-        'Code',
+        'AvailableCommunities',
         { user })
       } else {
-        setMessage("Email or Password is incorrect. Please try again")
+        setMessage("Code is incorrect. Please try again")
       }
     });
 
@@ -93,52 +91,16 @@ export default LoginScreen = (props) => {
             style={{ flex: 7 }}
             contentContainerStyle={styles.contentContainer}> */}
           <View style={[styles.input]}>
-
-            <Icon name="person" color="#DDD" size={28} style={styles.icon} />
-            <DefaultInput placeholder="Email"
+            <Icon name="lock" color="#DDD" size={28} style={styles.icon} />
+            <DefaultInput placeholder="Code"
+              label="Code"
               style={styles.textInput}
               placeholderTextColor="#DDD"
-              value={email}
-              onChangeText={(val) => setEmail(val)}
+              value={code}
+              onChangeText={(val) => setCode(val)}
               autoCorrect={false}
-              //valid={userStore.validateEmail}
               autoCapitalize="none"
-              keyboardType="email-address"
-
             />
-          </View>
-          <View style={[styles.input]}>
-            <Icon name="lock" color="#DDD" size={28} style={styles.icon} />
-            <DefaultInput placeholder="Password" style={styles.textInput}
-              placeholderTextColor="#DDD"
-              value={password}
-              //valid={userStore.validatePassword}
-              onChangeText={(val) => setPassword(val)}
-              secureTextEntry
-            />
-          </View>
-          <View style={{ ...THEME.ROW, justifyContent: 'space-between', }}>
-            <TouchableHighlight style={{ paddingRight: 20, marginBottom: 10 }} onPress={() => props.navigation.navigate('Register')}>
-              <Text style={{
-                color: THEME.BLUE_PRIMARY, ...THEME.TEXT_BODY_SMALL,
-                textDecorationLine: 'underline',
-                textDecorationColor: THEME.BLUE_PRIMARY,
-                textDecorationStyle: 'solid'
-              }}>
-                Sign Up
-                        </Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => {
-                props.navigation.navigate('PasswordReset', {
-                  toggleEmailToast
-                })
-                AsyncStorage.setItem('url', url)
-              }
-              }
-            >
-              <Text style={{ ...THEME.TEXT_BODY_SMALL, textDecorationLine: "underline", color: THEME.BLUE_PRIMARY }}>Forgot Password</Text>
-            </TouchableHighlight>
           </View>
           <View style={styles.buttons}>
             <View style={{ height: 30 }}>{spinner}</View>
@@ -146,8 +108,8 @@ export default LoginScreen = (props) => {
                 style={styles.buttonPadding}
                 color={THEME.BLUE_PRIMARY}
                 inverse={true}
-                onPress={onLogin}
-                title={"Log In"}
+                onPress={onSubmit}
+                title={"Submit"}
               // disabled={userStore.validateEmail && userStore.validatePassword ? false : true}
               />
           </View>
@@ -158,8 +120,8 @@ export default LoginScreen = (props) => {
   );
 }
 
-LoginScreen.navigationOptions = {
-  title: 'Login',
+CodeScreen.navigationOptions = {
+  title: 'Enter Daily Code',
 };
 
 const styles = StyleSheet.create({

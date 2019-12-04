@@ -5,59 +5,91 @@ import {
   View,
   Button,
   Text,
-  TextInput
+  TextInput,
+  RefreshControl
 } from 'react-native';
 import axios from 'axios';
 import CustomButton from '../components/Button';
 import NextButton from '../components/NextButton';
-
 import { MonoText } from '../components/StyledText';
 import { getMenuItems, getOrderStatus } from '../utils/utils.js';
 import { THEME } from '../constants/Theme.js';
 import { UserContext } from '../context/AppContext';
+import customInput from '../components/CustomInput';
 
 
 export default OrderStatusScreen = (props) => {
 
   let { navigation } = props;
   let selectedMenuItem = navigation.state.params.selectedMenuItem;
-  let orderId = navigation.state.params.orderId;
-  const [order, setOrder] = useState();
+  let orderId = navigation.state.params?.orderId;
   let selectedToppings = navigation.state.params.selectedToppings;
   let selectedCommunity = navigation.state.params ?.selectedCommunity;
   let note = navigation.state.params.note;
+  const [order, setOrder] = useState();
+  const [refreshOrder, setRefreshOrder] = useState(false);
   const [user, setUser] = useContext(UserContext);
 
-  useEffect()
+  useEffect(()=> {
+    if(orderId != null && orderId > 0 && (refreshOrder === null || refreshOrder === true)){
+    getOrderStatus(orderId).then((response) => {
+      setOrder(response);
+    })
+    if(refreshOrder)
+    {
+      setRefreshOrder(false);
+    }
+  } else {
+    //get last pending order for user
+  }
+  }, [refreshOrder])
+
+  const refreshOrderHandler = () => {
+    setRefreshOrder(true)
+  }
+
   return (
     <View style={styles.container}>
-
       <View
         style={{ flex: 9 }}
         contentContainerStyle={styles.contentContainer}>
-        <View style={{ flexDirection: "column", flex: 1 }}>
-          <View style={{ flexDirection: "row", marginBottom: 25 }}>
-            <View style={{ flex: 7 }}>
-              <View style={{ backgroundColor: "blue", height: 2, width: "100%", zIndex: -1, marginTop:8}}></View>
+        <ScrollView  refreshControl={
+          <RefreshControl refreshing={refreshOrder} onRefresh={refreshOrderHandler}
+          />
+        }>
+        <View style={{ flexDirection: "row", marginBottom: 40 }}>
+            <View style={{ flex: 4 }}>
+              <View style={{ backgroundColor: THEME.GREEN_PRIMARY, height: 2, width: "100%", zIndex: 20000, marginTop:8}}></View>
             </View>
-            <View style={{ flex: 1 }}>
-              <View style={{ flexDirection: "column", backgroundColor: "white", width: 20, height: 20, borderRadius: 50, borderWidth: 5, borderColor: "green" }}>
-                <View></View>
-                <View style={{rotation: 65}}><Text>In progress</Text>
-                </View>
+            {/* Pending Circle */}
+            <View style={{ flex: 1,  flexDirection: "column" }}>
+              <View style={{backgroundColor: "white", width: "100%", height: 20, borderRadius: 50, borderWidth: 5, borderColor: THEME.GREEN_PRIMARY }}>
               </View>
+                <View style={{width:200, marginLeft: -17}}><Text style={{fontSize: 12, color: THEME.GREEN_PRIMARY}}>Pending</Text>
+                </View>
             </View>
-            <View style={{ flex: 7 }}>
-            <View style={{ backgroundColor: "red", height: 2, width:"100%", zIndex: -1, marginTop:8}}></View>
+            <View style={{ flex: 5 }}>
+            <View style={{ backgroundColor: order?.status == "InProgress" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM, height: 2, width:"100%", zIndex: -1, marginTop:8}}></View>
             </View>
-            <View style={{ flex: 1 }}>
-              <View style={{ backgroundColor: "white", width: 20, height: 20, borderRadius: 50, borderWidth: 5, borderColor: "green" }}></View>
+            {/* In progress Circle */}
+            <View style={{ flex: 1,  flexDirection: "column" }}>
+              <View style={{backgroundColor: "white", width: "100%", height: 20, borderRadius: 50, borderWidth: 5, borderColor: order?.status == "InProgress" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM,}}>
+              </View>
+                <View style={{width:200, marginLeft: -17}}><Text style={{fontSize: 12, color:  order?.status == "InProgress" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM}}>In Progress</Text>
+                </View>
             </View>
-            <View style={{ flex: 7 }}>
-            <View style={{ backgroundColor: "grey", height: 2, width: "100%", zIndex: -1, marginTop:8}}></View>
+            <View style={{ flex: 5 }}>
+            <View style={{ backgroundColor:  order?.status == "Complete" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM, height: 2, width: "100%", zIndex: -1, marginTop:8}}></View>
             </View>
-            <View style={{ flex: 1 }}>
-              <View style={{ backgroundColor: "white", width: 20, height: 20, borderRadius: 50, borderWidth: 5, borderColor: "grey" }}></View>
+            {/* Completed Circle */}
+            <View style={{ flex: 1,  flexDirection: "column" }}>
+              <View style={{backgroundColor: "white", width: "100%", height: 20, borderRadius: 50, borderWidth: 5, borderColor:  order?.status == "Complete" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM }}>
+              </View>
+                <View style={{width:200, marginLeft: -17}}><Text style={{fontSize: 12, color:  order?.status == "Complete" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM}}>Out for delivery</Text>
+                </View>
+            </View>
+            <View style={{ flex: 4 }}>
+              <View style={{ backgroundColor:  order?.status == "Complete" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM, height: 2, width: "100%", zIndex: 20000, marginTop:8}}></View>
             </View>
           </View>
           <View style={{ flexDirection: "row", marginBottom: 25 }}>
@@ -96,8 +128,7 @@ export default OrderStatusScreen = (props) => {
               })}
             </View>
           </View>
-        </View>
-        <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, marginTop: 30 }}>
           <View>
             <Text style={{ fontSize: 14, marginBottom: 15 }}>{`Special instructions:`}</Text>
           </View>
@@ -105,6 +136,7 @@ export default OrderStatusScreen = (props) => {
             <Text style={{ fontSize: 14 }}>{`${note != undefined ? note : ""}`}</Text>
           </View>
         </View>
+        </ScrollView>
       </View>
       <View style={{ flex: 1 }}>
       </View>

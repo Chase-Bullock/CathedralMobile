@@ -16,7 +16,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import DefaultInput from '../components/CustomInput';
 import { Dropdown } from 'react-native-material-dropdown';
 import { MonoText } from '../components/StyledText';
-import { registerUser, getBuilders, getCities } from '../utils/utils.js';
+import { registerUser, getBuilders, getCities, updateUser } from '../utils/utils.js';
 import { THEME } from '../constants/Theme.js';
 import { UserContext } from '../context/AppContext.js';
 
@@ -24,9 +24,12 @@ export default RegisterScreen = (props) => {
 
   let { navigation } = props;
 
+  let lastRoute = navigation.state.params ?.lastRoute;
+
   const [user, setUser] = useContext(UserContext);
   const [userObj, setUserObject] = useState({});
   const [error, setError] = useState();
+  const [updatingUser, setUpdatingUser] = useState(false);
   const [cities, setCities] = useState();
   const [builders, setBuilders] = useState(
     [
@@ -41,7 +44,14 @@ export default RegisterScreen = (props) => {
   const [showValidation, setShowValidation] = useState({});
   const [validationMessage, setValidationMessage] = useState();
 
-
+  useEffect(() => {
+    if (Object.keys(user).length != 0) {
+      setUpdatingUser(true);
+      console.log(user)
+      setUserObject(user);
+      setValidation({ ...validation, password: true, email: true })
+    }
+  }, [])
   useEffect(() => {
     getBuilders().then(response => setBuilders(response.map(builder => {
       return { value: builder.id, label: builder.name }
@@ -58,7 +68,7 @@ export default RegisterScreen = (props) => {
 
   validateEmail = () => {
     let isValid = true;
-    isValid = isValid && this.isEmailValid(userObj ?.email);
+    isValid = isValid && this.isEmailValid(userObj ?.email.toLowerCase());
     setValidation({
       ...validation,
       email: isValid
@@ -82,33 +92,53 @@ export default RegisterScreen = (props) => {
   }
 
   handleRegisterUser = () => {
-    if(userObj.firstName &&
+    if (!updatingUser &&
+      userObj.firstName &&
       userObj.lastName &&
-      userObj.email && 
+      userObj.email &&
       userObj.number &&
       userObj.addressLine1 &&
       userObj.zipcode &&
       userObj.builderId &&
-      userObj.cityId && 
+      userObj.cityId &&
       userObj.password &&
-      userObj.confirmPassword ) {
-    registerUser(userObj).then((response) => {
-      console.log(response);
-      if(response?.token){
-      setUser(response);
-      navigation.navigate(
-        'Menu',
-        { user })
-      } else {
-        setError(response[0].description)
-      }
-    })
-  } else {
-    setError("Please fill out all required fields")
-  }
+      userObj.confirmPassword) {
+      registerUser(userObj).then((response) => {
+        console.log(response);
+        if (response ?.token) {
+          setUser(response);
+          navigation.navigate(
+            'AvailableCommunities',
+            { user })
+        } else {
+          setError(response[0].description)
+        }
+      })
+    } else if (updatingUser &&
+      userObj.firstName &&
+      userObj.lastName &&
+      userObj.email &&
+      userObj.number &&
+      userObj.addressLine1 &&
+      userObj.zipcode &&
+      userObj.builderId &&
+      userObj.cityId) {
+      updateUser(userObj).then((response) => {
+        console.log(response);
+        if (response ?.token) {
+          setUser(response);
+          navigation.navigate(
+            lastRoute,
+            { user })
+        } else {
+          setError(response[0].description)
+        }
+      })
+    } else {
+      setError("Please fill out all required fields")
+    }
   }
 
-  console.log(userObj)
   console.log(validation)
   return (
     <View style={styles.container}>
@@ -156,7 +186,7 @@ export default RegisterScreen = (props) => {
                   ...userObj,
                   email: val
                 })
-                setTimeout(() => {validateEmail()},2000)
+                setTimeout(() => { validateEmail() }, 2000)
               }}
               onBlur={() => {
                 setShowValidation({
@@ -212,12 +242,13 @@ export default RegisterScreen = (props) => {
             <View
               style={{ marginLeft: 15 }}>
               <Dropdown
+                value={userObj ?.cityId}
                 animationDuration={50}
                 dropdownOffset={{ top: 10, left: 0 }}
                 data={cities}
                 onChangeText={(val) => {
                   LayoutAnimation.configureNext(LayoutAnimation.Presets.spring),
-                  setUserObject({ ...userObj, cityId: val })
+                    setUserObject({ ...userObj, cityId: val })
                 }}
               />
             </View>
@@ -240,74 +271,79 @@ export default RegisterScreen = (props) => {
             <View
               style={{ marginLeft: 15 }}>
               <Dropdown
+                value={userObj ?.builderId}
                 animationDuration={50}
                 dropdownOffset={{ top: 10, left: 0 }}
                 data={builders}
                 onChangeText={(val) => {
                   LayoutAnimation.configureNext(LayoutAnimation.Presets.spring),
-                  setUserObject({ ...userObj, builderId: val })
+                    setUserObject({ ...userObj, builderId: val })
                 }}
               />
             </View>
           </View>
-          <View style={[styles.textInput]}>
-            {
-              showValidation ?.password && !validation ?.password &&
-                <Text style={styles.invalid}> {
-                  validationMessage
-                }
-                </Text>
+          {!updatingUser &&
+            <View>
+              <View style={[styles.textInput]}>
+                {
+                  showValidation ?.password && !validation ?.password &&
+                    <Text style={styles.invalid}> {
+                      validationMessage
+                    }
+                    </Text>
             }
-            <DefaultInput
-              label="Password"
-              placeholder="Password"
-              style={styles.textInput}
-              placeholderTextColor="#DDD"
-              value={userObj ?.password}
-              onChangeText={(val) => {
-                setUserObject({
-                  ...userObj,
-                  password: val
-                })
-                setTimeout(() => {validatePassword()},2000)
-              }
-              }
-              secureTextEntry
-            />
-          </View>
-          <View style={[styles.textInput]}>
-            <DefaultInput
-              label="Confirm Password"
-              placeholder="Confirm Password"
-              style={styles.textInput}
-              placeholderTextColor="#DDD"
-              value={userObj ?.confirmPassword}
-              onChangeText={(val) => {
-                setUserObject({
-                  ...userObj,
-                  confirmPassword: val
-                })
-                setTimeout(() => {validatePassword()},2000)
-                validatePassword()
-              }
-              }
-              onBlur={() => {
-                setShowValidation({
-                  ...showValidation,
-                  password: true
-                })
-              }}
-              secureTextEntry
-            />
-          </View>
 
+                <DefaultInput
+                  label="Password"
+                  placeholder="Password"
+                  style={styles.textInput}
+                  placeholderTextColor="#DDD"
+                  value={userObj ?.password}
+                  onChangeText={(val) => {
+                    setUserObject({
+                      ...userObj,
+                      password: val
+                    })
+                    setTimeout(() => { validatePassword() }, 2000)
+                  }
+                  }
+                  secureTextEntry
+                />
+              </View>
+              <View style={[styles.textInput]}>
+                <DefaultInput
+                  label="Confirm Password"
+                  placeholder="Confirm Password"
+                  style={styles.textInput}
+                  placeholderTextColor="#DDD"
+                  value={userObj ?.confirmPassword}
+                  onChangeText={(val) => {
+                    setUserObject({
+                      ...userObj,
+                      confirmPassword: val
+                    })
+                    setTimeout(() => { validatePassword() }, 2000)
+                    validatePassword()
+                  }
+                  }
+                  onBlur={() => {
+                    setShowValidation({
+                      ...showValidation,
+                      password: true
+                    })
+                  }}
+                  secureTextEntry
+                />
+              </View>
+            </View>
+          }
         </ScrollView>
       </KeyboardAvoidingView>
       <View style={{ flex: 1 }}>
-      <Text style={styles.invalid}>{error}</Text>
+        <Text style={styles.invalid}>{error}</Text>
         <NextButton
           disabled={!validation.email || !validation.password}
-          title="Register"
+          title={updatingUser ? "Confirm" : "Register"}
           onPress={handleRegisterUser}
         />
       </View>

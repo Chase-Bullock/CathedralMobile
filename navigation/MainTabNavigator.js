@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import TabBarIcon from '../components/TabBarIcon';
 import MenuScreen from '../screens/MenuScreen';
+import CodeScreen from '../screens/CodeScreen';
 import ToppingsScreen from '../screens/ToppingsScreen';
 import NoteScreen from '../screens/NoteScreen';
 import ReviewScreen from '../screens/ReviewScreen';
@@ -19,12 +20,13 @@ import RegisterScreen from '../screens/RegisterScreen';
 import AvailableCommunitiesScreen from '../screens/AvailableCommunitiesScreen.js';
 
 const HomeStack = createStackNavigator({
+  Code: CodeScreen,
+  AvailableCommunities: AvailableCommunitiesScreen,
   Menu: MenuScreen,
   Toppings: ToppingsScreen,
   Note: NoteScreen,
   Review: ReviewScreen,
   OrderStatus: OrderStatusScreen,
-  AvailableCommunities: AvailableCommunitiesScreen,
 },
 {
   defaultNavigationOptions: {

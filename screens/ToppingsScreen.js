@@ -31,7 +31,9 @@ export default ToppingsScreen = (props) => {
 
 
   useEffect(() => {
-    if (selectedMenuItem.name == "pizza") {
+    console.log(selectedMenuItem)
+    if (selectedMenuItem.name == "Pizza") {
+      console.log("hererkejrlejrlrhLJ")
       getToppingsForMenuItem(selectedMenuItem.name, "Meat").then((response) => setMeatToppings(response));
     } else if (selectedMenuItem.name == "Taco") {
       getToppingsForMenuItem(selectedMenuItem.name, "Topping").then((response) => setTacoToppings(response));
@@ -76,6 +78,21 @@ export default ToppingsScreen = (props) => {
           <Text style={{ color: "red" }}>{errorMsg}</Text>
         </View>
         <View style={{ alignItems: "center", flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
+        {meatToppings &&
+            <Text style={THEME.TEXT_SECTION_TITLE_SMALL}>Toppings</Text>}
+          {
+            meatToppings && meatToppings.map((topping, index) => {
+              return (
+                <CustomButton
+                  key={topping.id}
+                  style={{ marginBottom: 12, height: 50 }}
+                  title={topping.name}
+                  selected={selectedToppings.includes(topping)}
+                  //image={'../assets/images/pizza.png'}
+                  onPress={() => { selectToppingItem(topping) }} />
+              )
+            })
+          }
           {tacoToppings &&
             <Text style={THEME.TEXT_SECTION_TITLE_SMALL}>Taco Toppings</Text>}
           {
@@ -91,8 +108,8 @@ export default ToppingsScreen = (props) => {
               )
             })
           }
-          {tacoToppings &&
-            <Text style={THEME.TEXT_SECTION_TITLE_MEDIUM}>Taco Toppings</Text>}
+          {tacoSauceToppings &&
+            <Text style={THEME.TEXT_SECTION_TITLE_MEDIUM}>Sauces</Text>}
           {
             tacoSauceToppings && tacoSauceToppings.map((topping, index) => {
               return (

@@ -23,10 +23,10 @@ const customButton = (props => {
 
 
   if (props.image != undefined) {
-    imagePlaced = <View style={{ marginRight: props.title ? 3 : 0 }}>
+    imagePlaced = <View style={{ marginRight: props.title ? 3 : 0}}>
       <Image
         source={props.image}
-        style={{width: 80, height:80,}}
+        style={{width: 80, height:80}}
         color={props.inverse ? 'white' : props.color ? props.color : THEME.GREY_MEDIUM_ALT} />
     </View>
   }

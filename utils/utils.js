@@ -1,10 +1,6 @@
-//const baseUrl = 'http://172.31.99.10:5001';
-const baseUrl = 'http://192.168.0.109:5001';
+const baseUrl = 'http://172.31.98.11:5001';
+//const baseUrl = 'http://192.168.0.109:5001';
 
-const LOAD_USER = "LOAD_USER";
-
-import { useAppState } from "../context/AppContext"
-import appStateReducer from "../context/AppReducer";
 
 export async function getMenuItems() {
   try{
@@ -21,7 +17,6 @@ export async function getBuilders() {
   try{
   let result = await fetch(baseUrl + '/api/builders',);
   let resultJson = await result.json();
-  console.log(resultJson);
   return resultJson;
   } catch (error) {
     console.error(error);
@@ -33,7 +28,6 @@ export async function getOrderStatus(id) {
   try{
   let result = await fetch(baseUrl + `/api/orders/${id}`,);
   let resultJson = await result.json();
-  console.log(resultJson);
   return resultJson;
   } catch (error) {
     console.error(error);
@@ -44,7 +38,6 @@ export async function getCities() {
   try{
   let result = await fetch(baseUrl + '/api/locations/cities',);
   let resultJson = await result.json();
-  console.log(resultJson);
   return resultJson;
   } catch (error) {
     console.error(error);
@@ -92,6 +85,25 @@ export async function submitOrder(orderObj) {
   }
 };
 
+
+export async function submitCode(codeObj) {
+  console.log(codeObj);
+  try{
+  let result = await fetch(baseUrl + `/api/code`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(codeObj)});
+  let resultJson = await result.json();
+  //console.log(resultJson);
+  return resultJson;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export async function login(userObj) {
   try{
   let result = await fetch(baseUrl + `/api/accounts/login`, {
@@ -112,6 +124,24 @@ export async function login(userObj) {
 export async function registerUser(userObj) {
   try{
   let result = await fetch(baseUrl + `/api/accounts/`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userObj)});
+  let resultJson = await result.json();
+
+  return resultJson;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+export async function updateUser(userObj) {
+  try{
+  let result = await fetch(baseUrl + `/api/accounts/users/${userObj.id}`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
