@@ -1,5 +1,7 @@
-const baseUrl = 'http://172.31.98.11:5001';
+//const baseUrl = 'http://172.31.98.11:5001';
 //const baseUrl = 'http://192.168.0.109:5001';
+const baseUrl = 'http://192.168.0.108:5001';
+
 
 
 export async function getMenuItems() {

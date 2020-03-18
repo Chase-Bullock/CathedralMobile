@@ -7,6 +7,12 @@ const customButton = (props => {
   let iconPlaced = null;
   let imagePlaced = null
   let buttonTitle = null;
+  let checkbox = null;
+
+  let checkboxIcon = "check";
+  let checkboxColor = THEME.GREEN_ACCENT;
+  let checkboxIconSize = 28;
+
 
   if (props.title) {
     buttonTitle = <Text style={[styles.text, { color: props.inverse ? 'white' : props.color, fontSize: 18, flex:2 }]}>{props.title}</Text>;
@@ -20,6 +26,10 @@ const customButton = (props => {
         color={props.inverse ? 'white' : props.color ? props.color : THEME.GREY_MEDIUM_ALT} />
     </View>
   }
+    checkbox =
+      <View style={{opacity: props.selected ? 100 : 0, position: "absolute", right: 10}}>
+        <Icon name={checkboxIcon} size={checkboxIconSize} color={checkboxColor} />
+      </View>
 
 
   if (props.image != undefined) {
@@ -46,7 +56,7 @@ const customButton = (props => {
       {imagePlaced}
       {iconPlaced}
       {buttonTitle}
-
+      {checkbox}
     </TouchableOpacity>
   )
 });
@@ -63,7 +73,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     padding:5,
     marginBottom:5,
-    minHeight:50,
+    minHeight:40,
     backgroundColor:"#FFF",
     flexDirection:"row",
     justifyContent:"flex-start",

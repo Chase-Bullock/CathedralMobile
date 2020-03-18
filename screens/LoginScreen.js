@@ -55,7 +55,7 @@ export default LoginScreen = (props) => {
       setUser(response);
       setMessage("");
       navigation.navigate(
-        'Code',
+        'Main Menu',
         { user })
       } else {
         setMessage("Email or Password is incorrect. Please try again")
@@ -141,7 +141,8 @@ export default LoginScreen = (props) => {
             </TouchableHighlight>
           </View>
           <View style={styles.buttons}>
-            <View style={{ height: 30 }}>{spinner}</View>
+            <View style={{ height: 25 }}>{spinner}</View>
+            <View style={{alignItems:"center"}}>
               <ButtonBackground
                 style={styles.buttonPadding}
                 color={THEME.BLUE_PRIMARY}
@@ -150,6 +151,7 @@ export default LoginScreen = (props) => {
                 title={"Log In"}
               // disabled={userStore.validateEmail && userStore.validatePassword ? false : true}
               />
+              </View>
           </View>
           {/* </View> */}
         </View>
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   buttonPadding: {
-    padding: 15,
+    padding: 10,
     borderRadius: 5
   },
   buttons: {

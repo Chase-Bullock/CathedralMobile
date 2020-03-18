@@ -18,6 +18,7 @@ import OrderStatusScreen from '../screens/OrderStatusScreen.js';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import AvailableCommunitiesScreen from '../screens/AvailableCommunitiesScreen.js';
+import MainMenuScreen from '../screens/MainMenuScreen.js';
 
 const HomeStack = createStackNavigator({
   Code: CodeScreen,
@@ -27,6 +28,7 @@ const HomeStack = createStackNavigator({
   Note: NoteScreen,
   Review: ReviewScreen,
   OrderStatus: OrderStatusScreen,
+  MainMenu: MainMenuScreen
 },
 {
   defaultNavigationOptions: {

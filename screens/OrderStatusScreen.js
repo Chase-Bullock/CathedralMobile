@@ -69,13 +69,13 @@ export default OrderStatusScreen = (props) => {
                 </View>
             </View>
             <View style={{ flex: 5 }}>
-            <View style={{ backgroundColor: order?.status == "InProgress" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM, height: 2, width:"100%", zIndex: -1, marginTop:8}}></View>
+            <View style={{ backgroundColor: order?.status == "Acknowledged" || order?.status == "Complete" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM, height: 2, width:"100%", zIndex: -1, marginTop:8}}></View>
             </View>
             {/* In progress Circle */}
             <View style={{ flex: 1,  flexDirection: "column" }}>
-              <View style={{backgroundColor: "white", width: "100%", height: 20, borderRadius: 50, borderWidth: 5, borderColor: order?.status == "InProgress" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM,}}>
+              <View style={{backgroundColor: "white", width: "100%", height: 20, borderRadius: 50, borderWidth: 5, borderColor: order?.status == "Acknowledged" || order?.status == "Complete" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM,}}>
               </View>
-                <View style={{width:200, marginLeft: -17}}><Text style={{fontSize: 12, color:  order?.status == "InProgress" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM}}>In Progress</Text>
+                <View style={{width:200, marginLeft: -17}}><Text style={{fontSize: 12, color:  order?.status == "Acknowledged" ||order?.status == "Complete" ? THEME.GREEN_PRIMARY : THEME.GREY_MEDIUM}}>In Progress</Text>
                 </View>
             </View>
             <View style={{ flex: 5 }}>

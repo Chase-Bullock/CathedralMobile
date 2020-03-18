@@ -104,6 +104,7 @@ export default CodeScreen = (props) => {
           </View>
           <View style={styles.buttons}>
             <View style={{ height: 30 }}>{spinner}</View>
+            <View style={{alignItems:"center"}}>
               <ButtonBackground
                 style={styles.buttonPadding}
                 color={THEME.BLUE_PRIMARY}
@@ -112,6 +113,7 @@ export default CodeScreen = (props) => {
                 title={"Submit"}
               // disabled={userStore.validateEmail && userStore.validatePassword ? false : true}
               />
+              </View>
           </View>
           {/* </View> */}
         </View>
@@ -145,7 +147,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   buttonPadding: {
-    padding: 15,
+    padding: 10,
     borderRadius: 5
   },
   buttons: {
